@@ -18,9 +18,9 @@ import com.taoswork.tallycheck.general.solution.spring.BeanCreationMonitor;
 import com.taoswork.tallycheck.tallyadmin.AdminAuthorityProvider;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallycheck.tallybiz.TallyBizDataService;
-import com.taoswork.tallycheck.tallymanagement.TallyManagementDataService;
+import com.taoswork.tallycheck.tallybus.TallyBusDataService;
 import com.taoswork.tallycheck.tallyuser.TallyUserDataService;
-import com.taoswork.tallycheck.tallyuser.UserCertificationService;
+import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -52,7 +52,7 @@ public class AdminCoreConfig {
     public static final String USER_DATA_SERVICE = "tallyuser-data-service";
     public static final String ADMIN_DATA_SERVICE = "tallyadmin-data-service";
     public static final String BIZ_DATA_SERVICE = "tallybiz-data-service";
-    public static final String MANAGEMENT_DATA_SERVICE = "tallymanagement-data-service";
+    public static final String MANAGEMENT_DATA_SERVICE = "tallybus-data-service";
     public static final String USER_CERT_DATA_SERVICE = "user-cert-data-service";
     public static final String ADMIN_AUTHORITY_DATA_SERVICE = "admin-authority-data-service";
 
@@ -101,13 +101,13 @@ public class AdminCoreConfig {
     }
 
     @Bean(name = MANAGEMENT_DATA_SERVICE)
-    protected  TallyManagementDataService tallyManagementDataService() {
-        return dubboService(TallyManagementDataService.class);
+    protected TallyBusDataService tallyManagementDataService() {
+        return dubboService(TallyBusDataService.class);
     }
 
     @Bean(name = USER_CERT_DATA_SERVICE)
-    protected  UserCertificationService userCertificationService() {
-        return dubboService(UserCertificationService.class);
+    protected UserAuthenticationService userCertificationService() {
+        return dubboService(UserAuthenticationService.class);
     }
 
     @Bean(name = ADMIN_AUTHORITY_DATA_SERVICE)
@@ -118,7 +118,7 @@ public class AdminCoreConfig {
     @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
     public UserDetailsService adminEmployeeDetailsService() {
         AdminEmployeeDetailsServiceImpl adminEmployeeDetailsService = new AdminEmployeeDetailsServiceImpl();
-        adminEmployeeDetailsService.setUserCertificationService(userCertificationService());
+        adminEmployeeDetailsService.setUserAuthenticationService(userCertificationService());
         adminEmployeeDetailsService.setTallyAdminDataService(tallyAdminDataService());
         return adminEmployeeDetailsService;
     }

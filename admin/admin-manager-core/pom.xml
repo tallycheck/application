@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
-            <artifactId>tallymanagement-api</artifactId>
+            <artifactId>tallybus-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
-            <artifactId>tallymanagement-datadomain</artifactId>
+            <artifactId>tallybus-datadomain</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>

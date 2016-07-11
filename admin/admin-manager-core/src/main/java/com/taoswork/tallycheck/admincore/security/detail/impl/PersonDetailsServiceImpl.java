@@ -5,7 +5,7 @@ import com.taoswork.tallycheck.admincore.security.detail.PersonDetailsService;
 import com.taoswork.tallycheck.datadomain.tallyuser.AccountStatus;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallycheck.datasolution.annotations.EntityServiceMark;
-import com.taoswork.tallycheck.tallyuser.UserCertificationService;
+import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -25,7 +25,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 //    private static final String ADMIN_USER_NAME_ON_EMPTY_DB = "admin";
 //    private static final String ADMIN_PASSWORD_ON_EMPTY_DB = "admin";
 
-    private UserCertificationService userCertificationService;
+    private UserAuthenticationService userAuthenticationService;
 
     //
 //    private Boolean userDbHasData = null;
@@ -42,7 +42,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 //            }
 //        }
 
-        Person person = userCertificationService.getPersonByAnyIdentity(username);
+        Person person = userAuthenticationService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
             return null;
         }

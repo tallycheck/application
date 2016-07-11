@@ -8,7 +8,7 @@ import com.taoswork.tallycheck.datadomain.tallybiz.subject.*;
 import com.taoswork.tallycheck.datadomain.tallybiz.work.WorkFeedback;
 import com.taoswork.tallycheck.datadomain.tallybiz.work.WorkPlan;
 import com.taoswork.tallycheck.datadomain.tallybiz.work.WorkTicket;
-import com.taoswork.tallycheck.datadomain.tallymanagement.ModuleEntry;
+import com.taoswork.tallycheck.datadomain.tallybus.ModuleEntry;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallycheck.general.solution.menu.IMenuEntryUpdater;
 import com.taoswork.tallycheck.general.solution.menu.Menu;

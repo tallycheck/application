@@ -5,7 +5,7 @@ import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetailsSer
 import com.taoswork.tallycheck.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataService;
-import com.taoswork.tallycheck.tallyuser.UserCertificationService;
+import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,12 +22,12 @@ import java.util.ArrayList;
 //unable to declare @Service component here, because we don't have bean TallyUserDataService declared in this maven module
 public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsService {
 
-    private UserCertificationService userCertificationService;
+    private UserAuthenticationService userAuthenticationService;
 
     private TallyAdminDataService tallyAdminDataService;
 
-    public void setUserCertificationService(UserCertificationService userCertificationService) {
-        this.userCertificationService = userCertificationService;
+    public void setUserAuthenticationService(UserAuthenticationService userAuthenticationService) {
+        this.userAuthenticationService = userAuthenticationService;
     }
 
     public void setTallyAdminDataService(TallyAdminDataService tallyAdminDataService) {
@@ -37,7 +37,7 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
     @Override
     public AdminEmployeeDetails loadPersonByUsername(String username) throws UsernameNotFoundException {
 
-        Person person = userCertificationService.getPersonByAnyIdentity(username);
+        Person person = userAuthenticationService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
             return null;
         }

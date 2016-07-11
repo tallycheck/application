@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
-            <artifactId>tallymanagement-api</artifactId>
+            <artifactId>tallybus-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
