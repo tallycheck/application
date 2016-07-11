@@ -2,10 +2,11 @@ package com.taoswork.tallycheck.admincore.security.detail.impl;
 
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetails;
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetailsService;
+import com.taoswork.tallycheck.authentication.UserAuthenticationService;
 import com.taoswork.tallycheck.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataService;
-import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
+import com.taoswork.tallycheck.tallyuser.TallyUserDataService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,8 +27,14 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
 
     private TallyAdminDataService tallyAdminDataService;
 
+    private TallyUserDataService tallyUserDataService;
+
     public void setUserAuthenticationService(UserAuthenticationService userAuthenticationService) {
         this.userAuthenticationService = userAuthenticationService;
+    }
+
+    public void setTallyUserDataService(TallyUserDataService tallyUserDataService) {
+        this.tallyUserDataService = tallyUserDataService;
     }
 
     public void setTallyAdminDataService(TallyAdminDataService tallyAdminDataService) {
@@ -37,7 +44,7 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
     @Override
     public AdminEmployeeDetails loadPersonByUsername(String username) throws UsernameNotFoundException {
 
-        Person person = userAuthenticationService.getPersonByAnyIdentity(username);
+        Person person = tallyUserDataService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
             return null;
         }

@@ -2,10 +2,11 @@ package com.taoswork.tallycheck.admincore.security.detail.impl;
 
 import com.taoswork.tallycheck.admincore.security.detail.PersonDetails;
 import com.taoswork.tallycheck.admincore.security.detail.PersonDetailsService;
+import com.taoswork.tallycheck.authentication.UserAuthenticationService;
 import com.taoswork.tallycheck.datadomain.tallyuser.AccountStatus;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import com.taoswork.tallycheck.datasolution.annotations.EntityServiceMark;
-import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
+import com.taoswork.tallycheck.tallyuser.TallyUserDataService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -27,6 +28,8 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 
     private UserAuthenticationService userAuthenticationService;
 
+    private TallyUserDataService tallyUserDataService;
+
     //
 //    private Boolean userDbHasData = null;
     @Override
@@ -42,7 +45,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 //            }
 //        }
 
-        Person person = userAuthenticationService.getPersonByAnyIdentity(username);
+        Person person = tallyUserDataService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
             return null;
         }

@@ -8,6 +8,8 @@ import com.taoswork.tallycheck.admincore.TallyBookAdminCoreRoot;
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetailsService;
 import com.taoswork.tallycheck.admincore.security.detail.impl.AdminEmployeeDetailsServiceImpl;
 import com.taoswork.tallycheck.application.core.conf.ApplicationCommonConfig;
+import com.taoswork.tallycheck.authentication.UserAuthenticationService;
+import com.taoswork.tallycheck.authentication.UserAuthenticationServiceMock;
 import com.taoswork.tallycheck.dataservice.manage.DataServiceManager;
 import com.taoswork.tallycheck.dataservice.manage.impl.DataServiceManagerImpl;
 import com.taoswork.tallycheck.datasolution.annotations.DaoMark;
@@ -15,12 +17,16 @@ import com.taoswork.tallycheck.datasolution.annotations.EntityServiceMark;
 import com.taoswork.tallycheck.general.extension.annotations.FrameworkService;
 import com.taoswork.tallycheck.general.extension.collections.PropertiesUtility;
 import com.taoswork.tallycheck.general.solution.spring.BeanCreationMonitor;
-import com.taoswork.tallycheck.tallyadmin.AdminAuthorityProvider;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataService;
+import com.taoswork.tallycheck.tallyadmin.TallyAdminDataServiceMock;
+import com.taoswork.tallycheck.tallyadmin.authority.AdminAuthorityProvider;
+import com.taoswork.tallycheck.tallyadmin.authority.AdminAuthorityProviderMock;
 import com.taoswork.tallycheck.tallybiz.TallyBizDataService;
+import com.taoswork.tallycheck.tallybiz.TallyBizDataServiceMock;
 import com.taoswork.tallycheck.tallybus.TallyBusDataService;
+import com.taoswork.tallycheck.tallybus.TallyBusDataServiceMock;
 import com.taoswork.tallycheck.tallyuser.TallyUserDataService;
-import com.taoswork.tallycheck.tallyuser.UserAuthenticationService;
+import com.taoswork.tallycheck.tallyuser.TallyUserDataServiceMock;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -74,12 +80,14 @@ public class AdminCoreConfig {
         return registry;
     }
 
-    private <T> T dubboService(Class<T> serviceType){
+    private <T> T dubboService(Class<T> serviceType, Class<? extends T> mockType){
         ReferenceConfig<T> reference = new ReferenceConfig<T>();
         reference.setApplication(applicationConfig());
         reference.setRegistry(registryConfig());
         reference.setInterface(serviceType);
-//        reference.setVersion("1.0.0");
+        if(mockType != null){
+            reference.setMock(mockType.getName());
+        }
 
         T dataService = reference.get();
         return dataService;
@@ -87,38 +95,39 @@ public class AdminCoreConfig {
 
     @Bean(name = USER_DATA_SERVICE)
     protected TallyUserDataService tallyUserDataService() {
-        return dubboService(TallyUserDataService.class);
+        return dubboService(TallyUserDataService.class, TallyUserDataServiceMock.class);
     }
 
     @Bean(name = ADMIN_DATA_SERVICE)
     protected  TallyAdminDataService tallyAdminDataService() {
-        return dubboService(TallyAdminDataService.class);
+        return dubboService(TallyAdminDataService.class, TallyAdminDataServiceMock.class);
     }
 
     @Bean(name = BIZ_DATA_SERVICE)
     protected  TallyBizDataService tallyBusinessDataService() {
-        return dubboService(TallyBizDataService.class);
+        return dubboService(TallyBizDataService.class, TallyBizDataServiceMock.class);
     }
 
     @Bean(name = MANAGEMENT_DATA_SERVICE)
     protected TallyBusDataService tallyManagementDataService() {
-        return dubboService(TallyBusDataService.class);
+        return dubboService(TallyBusDataService.class, TallyBusDataServiceMock.class);
     }
 
     @Bean(name = USER_CERT_DATA_SERVICE)
     protected UserAuthenticationService userCertificationService() {
-        return dubboService(UserAuthenticationService.class);
+        return dubboService(UserAuthenticationService.class, UserAuthenticationServiceMock.class);
     }
 
     @Bean(name = ADMIN_AUTHORITY_DATA_SERVICE)
-    protected  AdminAuthorityProvider adminAuthorityProvider() {
-        return dubboService(AdminAuthorityProvider.class);
+    protected AdminAuthorityProvider adminAuthorityProvider() {
+        return dubboService(AdminAuthorityProvider.class, AdminAuthorityProviderMock.class);
     }
 
     @Bean(name = AdminEmployeeDetailsService.COMPONENT_NAME)
     public UserDetailsService adminEmployeeDetailsService() {
         AdminEmployeeDetailsServiceImpl adminEmployeeDetailsService = new AdminEmployeeDetailsServiceImpl();
         adminEmployeeDetailsService.setUserAuthenticationService(userCertificationService());
+        adminEmployeeDetailsService.setTallyUserDataService(tallyUserDataService());
         adminEmployeeDetailsService.setTallyAdminDataService(tallyAdminDataService());
         return adminEmployeeDetailsService;
     }

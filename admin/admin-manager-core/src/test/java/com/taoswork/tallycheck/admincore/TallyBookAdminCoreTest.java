@@ -14,6 +14,7 @@ public class TallyBookAdminCoreTest {
             applicationContext.refresh();
 
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail();
         }
     }

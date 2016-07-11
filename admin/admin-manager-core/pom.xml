@@ -22,6 +22,10 @@
         </dependency>
         <dependency>
             <groupId>com.taoswork.tallycheck</groupId>
+            <artifactId>tallyuser-authentication-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.taoswork.tallycheck</groupId>
             <artifactId>tallyuser-api</artifactId>
         </dependency>
         <dependency>
