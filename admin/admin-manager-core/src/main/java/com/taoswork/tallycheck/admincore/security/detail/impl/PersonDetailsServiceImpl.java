@@ -33,7 +33,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
     //
 //    private Boolean userDbHasData = null;
     @Override
-    public PersonDetails loadPersonByUsername(String username) throws UsernameNotFoundException {
+    public PersonDetails loadPersonByAnyIdentity(String username) throws UsernameNotFoundException {
 //        if(null == userDbHasData){
 //            if(personDao.isThereAnyData()){
 //                userDbHasData = true;
@@ -49,14 +49,14 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
         if (person == null || person.getId() == null) {
             return null;
         }
-        PersonDetails userDetails = new PersonDetails(person, null, new AccountStatus(), new ArrayList<GrantedAuthority>());
+        PersonDetails userDetails = new PersonDetails(person, new AccountStatus(), new ArrayList<GrantedAuthority>());
         return userDetails;
 
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return loadPersonByUsername(username);
+        return loadPersonByAnyIdentity(username);
     }
 
     @Override

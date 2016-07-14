@@ -6,11 +6,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * Created by Gao Yuan on 2015/5/14.
  */
-public interface AdminEmployeeDetailsService extends UserDetailsService {
-    public static final String ANONYMOUS_USER_NAME = "anonymousUser";
-    public static final String COMPONENT_NAME = "adminEmployeeDetailsService";
+public interface AdminEmployeeDetailsService extends PersonDetailsService {
 
-    AdminEmployeeDetails loadPersonByUsername(String username) throws UsernameNotFoundException;
+    AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException;
 
     public AdminEmployeeDetails getPersistentEmployeeDetails();
 }

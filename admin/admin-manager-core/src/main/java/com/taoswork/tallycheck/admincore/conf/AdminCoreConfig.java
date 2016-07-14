@@ -30,6 +30,7 @@ import com.taoswork.tallycheck.tallyuser.TallyUserDataServiceMock;
 import org.springframework.context.annotation.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -80,10 +81,14 @@ public class AdminCoreConfig {
         return registry;
     }
 
+    private Map<Class, ReferenceConfig> referenceConfigCache = new HashMap<>();
+
     private <T> T dubboService(Class<T> serviceType, Class<? extends T> mockType){
         ReferenceConfig<T> reference = new ReferenceConfig<T>();
+        referenceConfigCache.put(serviceType, reference);
         reference.setApplication(applicationConfig());
         reference.setRegistry(registryConfig());
+
         reference.setInterface(serviceType);
         if(mockType != null){
             reference.setMock(mockType.getName());

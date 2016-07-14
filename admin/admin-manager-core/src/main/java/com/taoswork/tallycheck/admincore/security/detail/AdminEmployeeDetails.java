@@ -14,8 +14,8 @@ public class AdminEmployeeDetails extends PersonDetails {
     protected AdminEmployee employee;
 
     public AdminEmployeeDetails(
-            AdminEmployee employee, Person person, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(person, password,
+            AdminEmployee employee, Person person, Collection<? extends GrantedAuthority> authorities) {
+        super(person,
                 employee.getStatus() == null ? new AccountStatus() : employee.getStatus(),
                 authorities);
         this.employee = employee;

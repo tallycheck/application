@@ -14,10 +14,10 @@ public class PersonDetails extends User {
 
     protected Person person;
 
-    public PersonDetails(Person person, String password,
+    public PersonDetails(Person person,
                          AccountStatus status,
                          Collection<? extends GrantedAuthority> authorities) {
-        super(person.getName(), password,
+        super(person.getName(), null,
                 status.enabled, true, true, status.locked,
                 authorities);
         this.person = person;

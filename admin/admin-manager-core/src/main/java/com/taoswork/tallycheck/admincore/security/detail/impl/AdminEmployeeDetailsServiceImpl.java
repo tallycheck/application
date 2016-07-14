@@ -21,7 +21,9 @@ import java.util.ArrayList;
  */
 //@Service(AdminEmployeeDetailsService.COMPONENT_NAME)
 //unable to declare @Service component here, because we don't have bean TallyUserDataService declared in this maven module
-public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsService {
+public class AdminEmployeeDetailsServiceImpl
+        extends PersonDetailsServiceImpl
+        implements AdminEmployeeDetailsService {
 
     private UserAuthenticationService userAuthenticationService;
 
@@ -42,21 +44,21 @@ public class AdminEmployeeDetailsServiceImpl implements AdminEmployeeDetailsServ
     }
 
     @Override
-    public AdminEmployeeDetails loadPersonByUsername(String username) throws UsernameNotFoundException {
+    public AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException {
 
         Person person = tallyUserDataService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
             return null;
         }
         AdminEmployee employee = tallyAdminDataService.getAdminEmployeeByPersonId(person.getId().toString());
-        AdminEmployeeDetails userDetails = new AdminEmployeeDetails( employee, person, null, new ArrayList<GrantedAuthority>());
+        AdminEmployeeDetails userDetails = new AdminEmployeeDetails(employee, person, new ArrayList<GrantedAuthority>());
         return userDetails;
 
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return loadPersonByUsername(username);
+        return loadPersonByAnyIdentity(username);
     }
 
     @Override

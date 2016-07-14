@@ -13,7 +13,7 @@ public interface PersonDetailsService extends UserDetailsService {
 
     //
     //    private Boolean userDbHasData = null;
-    PersonDetails loadPersonByUsername(String username) throws UsernameNotFoundException;
+    PersonDetails loadPersonByAnyIdentity(String username) throws UsernameNotFoundException;
 
     public PersonDetails getPersistentPersonDetails();
 }
