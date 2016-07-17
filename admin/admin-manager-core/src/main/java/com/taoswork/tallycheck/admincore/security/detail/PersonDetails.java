@@ -17,8 +17,8 @@ public class PersonDetails extends User {
     public PersonDetails(Person person,
                          AccountStatus status,
                          Collection<? extends GrantedAuthority> authorities) {
-        super(person.getName(), null,
-                status.enabled, true, true, status.locked,
+        super(person.getName(), "",
+                status.enabled, true, true, !status.locked,
                 authorities);
         this.person = person;
     }
@@ -30,5 +30,7 @@ public class PersonDetails extends User {
     public void setPerson(Person person) {
         this.person = person;
     }
+
+    public String getPersonId(){return person.getId().toString();}
 
 }

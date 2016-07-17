@@ -90,9 +90,9 @@ public class AdminCoreConfig {
         reference.setRegistry(registryConfig());
 
         reference.setInterface(serviceType);
-        if(mockType != null){
-            reference.setMock(mockType.getName());
-        }
+//        if(mockType != null){
+//            reference.setMock(mockType.getName());
+//        }
 
         T dataService = reference.get();
         return dataService;

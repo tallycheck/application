@@ -2,6 +2,7 @@ package com.taoswork.tallycheck.admincore.security.detail.impl;
 
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetails;
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetailsService;
+import com.taoswork.tallycheck.admincore.security.detail.PersonDetails;
 import com.taoswork.tallycheck.authentication.UserAuthenticationService;
 import com.taoswork.tallycheck.datadomain.tallyadmin.AdminEmployee;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
@@ -25,26 +26,18 @@ public class AdminEmployeeDetailsServiceImpl
         extends PersonDetailsServiceImpl
         implements AdminEmployeeDetailsService {
 
-    private UserAuthenticationService userAuthenticationService;
-
     private TallyAdminDataService tallyAdminDataService;
-
-    private TallyUserDataService tallyUserDataService;
-
-    public void setUserAuthenticationService(UserAuthenticationService userAuthenticationService) {
-        this.userAuthenticationService = userAuthenticationService;
-    }
-
-    public void setTallyUserDataService(TallyUserDataService tallyUserDataService) {
-        this.tallyUserDataService = tallyUserDataService;
-    }
 
     public void setTallyAdminDataService(TallyAdminDataService tallyAdminDataService) {
         this.tallyAdminDataService = tallyAdminDataService;
     }
 
     @Override
-    public AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException {
+    public PersonDetails loadDetailsByAnyIdentity(String username) throws UsernameNotFoundException {
+        return loadAdminEmployeeByAnyIdentity(username);
+    }
+
+    protected AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException {
 
         Person person = tallyUserDataService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
@@ -58,7 +51,7 @@ public class AdminEmployeeDetailsServiceImpl
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return loadPersonByAnyIdentity(username);
+        return loadAdminEmployeeByAnyIdentity(username);
     }
 
     @Override

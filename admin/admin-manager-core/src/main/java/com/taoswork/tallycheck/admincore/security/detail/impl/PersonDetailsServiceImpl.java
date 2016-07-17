@@ -26,14 +26,28 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 //    private static final String ADMIN_USER_NAME_ON_EMPTY_DB = "admin";
 //    private static final String ADMIN_PASSWORD_ON_EMPTY_DB = "admin";
 
-    private UserAuthenticationService userAuthenticationService;
+    protected UserAuthenticationService userAuthenticationService;
 
-    private TallyUserDataService tallyUserDataService;
+    protected TallyUserDataService tallyUserDataService;
+
+    public void setTallyUserDataService(TallyUserDataService tallyUserDataService) {
+        this.tallyUserDataService = tallyUserDataService;
+    }
+
+    public void setUserAuthenticationService(UserAuthenticationService userAuthenticationService) {
+        this.userAuthenticationService = userAuthenticationService;
+    }
+
+    @Override
+    public UserAuthenticationService getUserAuthenticationService() {
+        return userAuthenticationService;
+    }
+
 
     //
 //    private Boolean userDbHasData = null;
     @Override
-    public PersonDetails loadPersonByAnyIdentity(String username) throws UsernameNotFoundException {
+    public PersonDetails loadDetailsByAnyIdentity(String username) throws UsernameNotFoundException {
 //        if(null == userDbHasData){
 //            if(personDao.isThereAnyData()){
 //                userDbHasData = true;
@@ -56,7 +70,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return loadPersonByAnyIdentity(username);
+        return loadDetailsByAnyIdentity(username);
     }
 
     @Override

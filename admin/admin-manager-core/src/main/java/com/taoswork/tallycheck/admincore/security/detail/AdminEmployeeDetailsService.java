@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public interface AdminEmployeeDetailsService extends PersonDetailsService {
 
-    AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException;
+//    AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException;
 
     public AdminEmployeeDetails getPersistentEmployeeDetails();
 }

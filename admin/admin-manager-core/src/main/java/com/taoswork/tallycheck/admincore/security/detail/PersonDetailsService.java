@@ -1,5 +1,6 @@
 package com.taoswork.tallycheck.admincore.security.detail;
 
+import com.taoswork.tallycheck.authentication.UserAuthenticationService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -11,9 +12,11 @@ public interface PersonDetailsService extends UserDetailsService {
 
     public static final String COMPONENT_NAME = "PersonDetailsService";
 
+    UserAuthenticationService getUserAuthenticationService();
+
     //
     //    private Boolean userDbHasData = null;
-    PersonDetails loadPersonByAnyIdentity(String username) throws UsernameNotFoundException;
+    PersonDetails loadDetailsByAnyIdentity(String username) throws UsernameNotFoundException;
 
     public PersonDetails getPersistentPersonDetails();
 }

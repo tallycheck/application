@@ -1,15 +1,18 @@
 package com.taoswork.tallycheck.admincore;
 
 import com.taoswork.tallycheck.authority.core.ProtectionScope;
+import com.taoswork.tallycheck.datadomain.tallyadmin.AdminProtection;
+import com.taoswork.tallycheck.datadomain.tallyadmin.AdminProtectionSpec;
 
 /**
  * Created by Gao Yuan on 2015/4/24.
  */
 public class TallyBookAdminCoreRoot {
-    public static final String ADMIN_PROTECTION_SPACE = "AdminProtectionSpace";
-    public static final String ADMIN_PROTECTION_TENANT = "admin-tenant";
+    public static final String ADMIN_PROTECTION_SPEC = AdminProtectionSpec.COMMON_SPEC_NAME;
+    public static final String ADMIN_PROTECTION_REGION = AdminProtection.COMMON_REGION_NAME;
 
-    public static final ProtectionScope PROTECTION_SCOPE = new ProtectionScope(ADMIN_PROTECTION_SPACE, ADMIN_PROTECTION_TENANT);
+    public static final ProtectionScope PROTECTION_SCOPE =
+            new ProtectionScope(ADMIN_PROTECTION_SPEC, ADMIN_PROTECTION_REGION);
 
     /*
     public static void initEntityTypes(){
