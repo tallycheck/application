@@ -6,6 +6,7 @@ import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetails;
 import com.taoswork.tallycheck.admincore.security.detail.AdminEmployeeDetailsService;
 import com.taoswork.tallycheck.authority.core.ProtectionScope;
 import com.taoswork.tallycheck.datadomain.tallyadmin.AdminEmployee;
+import com.taoswork.tallycheck.datadomain.tallyadmin.TallyAdminDataDomain;
 import com.taoswork.tallycheck.datadomain.tallyuser.Person;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,6 @@ import javax.annotation.Resource;
  */
 @Service(AdminSecurityService.COMPONENT_NAME)
 public class AdminSecurityServiceImpl implements AdminSecurityService {
-    private static final String ANONYMOUS_USER_NAME = "anonymousUser";
 
     @Resource(name = AdminEmployeeDetailsService.COMPONENT_NAME)
     AdminEmployeeDetailsService tallyUserDataService;
@@ -40,8 +40,23 @@ public class AdminSecurityServiceImpl implements AdminSecurityService {
     }
 
     @Override
-    public String getCurrentUserId() {
-        return getPersistentPerson().getId().toString();
+    public boolean isAdministrator() {
+        return true;
+    }
+
+    @Override
+    public String getCurrentBu() {
+        return TallyAdminDataDomain.ADMINISTRATION_BU;
+    }
+
+    @Override
+    public String getCurrentPersonId() {
+        return getPersistentPerson().getId().toHexString();
+    }
+
+    @Override
+    public String getCurrentEmployeeId() {
+        return getPersistentAdminEmployee().getId().toHexString();
     }
 
     @Override

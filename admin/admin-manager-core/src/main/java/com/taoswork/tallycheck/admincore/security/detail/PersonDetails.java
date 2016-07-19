@@ -23,6 +23,13 @@ public class PersonDetails extends User {
         this.person = person;
     }
 
+    public PersonDetails(PersonDetails other){
+        super(other.getUsername(), other.getPassword(), other.isEnabled(),
+                other.isAccountNonExpired(), other.isCredentialsNonExpired(),
+                other.isAccountNonLocked(), other.getAuthorities());
+        this.person = other.getPerson();
+    }
+
     public Person getPerson() {
         return person;
     }
@@ -31,6 +38,8 @@ public class PersonDetails extends User {
         this.person = person;
     }
 
-    public String getPersonId(){return person.getId().toString();}
+    public String getPersonId() {
+        return person.getId().toString();
+    }
 
 }

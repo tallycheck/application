@@ -61,7 +61,7 @@ public class PersonDetailsServiceImpl implements PersonDetailsService {
 
         Person person = tallyUserDataService.getPersonByAnyIdentity(username);
         if (person == null || person.getId() == null) {
-            return null;
+            throw new UsernameNotFoundException(username);
         }
         PersonDetails userDetails = new PersonDetails(person, new AccountStatus(), new ArrayList<GrantedAuthority>());
         return userDetails;

@@ -39,14 +39,17 @@ public class AdminEmployeeDetailsServiceImpl
 
     protected AdminEmployeeDetails loadAdminEmployeeByAnyIdentity(String username) throws UsernameNotFoundException {
 
-        Person person = tallyUserDataService.getPersonByAnyIdentity(username);
+        PersonDetails personDetails = super.loadDetailsByAnyIdentity(username);
+        Person person = personDetails.getPerson();
         if (person == null || person.getId() == null) {
-            return null;
+            throw new UsernameNotFoundException(username);
         }
-        AdminEmployee employee = tallyAdminDataService.getAdminEmployeeByPersonId(person.getId().toString());
-        AdminEmployeeDetails userDetails = new AdminEmployeeDetails(employee, person, new ArrayList<GrantedAuthority>());
+        AdminEmployee employee = tallyAdminDataService.getAdminEmployeeByPersonId(person.getId().toHexString());
+        if (employee == null || employee.getId() == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        AdminEmployeeDetails userDetails = new AdminEmployeeDetails(employee, personDetails);
         return userDetails;
-
     }
 
     @Override

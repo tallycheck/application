@@ -8,3 +8,6 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 **/*.iml
+**/rebel.xml
+**/.rebel.xml.bak
+**/.rebel-remote.xml.bak

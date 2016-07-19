@@ -13,6 +13,11 @@ import java.util.Collection;
 public class AdminEmployeeDetails extends PersonDetails {
     protected AdminEmployee employee;
 
+    public AdminEmployeeDetails(AdminEmployee employee, PersonDetails personDetails){
+        super(personDetails);
+        this.employee = employee;
+    }
+
     public AdminEmployeeDetails(
             AdminEmployee employee, Person person, Collection<? extends GrantedAuthority> authorities) {
         super(person,
