@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,10 +57,11 @@ public class TallyApiController {
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
 
+        Locale locale = request.getLocale();
         EntityQueryRequest queryRequest = Parameter2RequestTranslator.makeQueryRequest(
                 entityTypes,
                 uriFromRequest(request),
-                requestParams, getParamInfoFilter());
+                requestParams, getParamInfoFilter(), locale);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService);
@@ -78,8 +80,9 @@ public class TallyApiController {
         EntityTypeParameter entityTypes = EntityTypeParameterBuilder.getBy(dataServiceManager, entityTypeName);
         Class entityType = entityTypes.getCeilingType();
 
+        Locale locale = request.getLocale();
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-                uriFromRequest(request), id);
+                uriFromRequest(request), id, locale);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService);

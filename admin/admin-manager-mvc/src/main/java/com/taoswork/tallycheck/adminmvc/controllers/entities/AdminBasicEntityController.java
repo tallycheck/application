@@ -88,7 +88,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
-                uriFromRequest(request), requestParams, getParamInfoFilter());
+                uriFromRequest(request), requestParams, getParamInfoFilter(), locale);
         infoRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityInfoResponse entityResponse = frontEndEntityService.getInfoResponse(infoRequest, locale);
@@ -126,7 +126,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
-            uriFromRequest(request), requestParams, getParamInfoFilter());
+            uriFromRequest(request), requestParams, getParamInfoFilter(), locale);
         entityRequest.addEntityInfoType(EntityInfoType.Grid);
 
         EntityQueryResponse entityQueryResponse = frontEndEntityService.query(entityRequest, locale);
@@ -216,7 +216,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypes,
-            uriFromRequest(request));
+            uriFromRequest(request), locale);
 
         EntityCreateFreshResponse addResponse = frontEndEntityService.createFresh(addRequest, locale);
         if (isAjaxDataRequest(request)) {
@@ -235,13 +235,14 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         makeDataMapBuilder("dataMap")
                 .addAttribute("menu", menu)
                 .addAttribute("menuPath", currentMPath)
-                .addToModule(model);;
+                .addAttribute("formResult", addResponse)
+                .addToModule(model);
 
         model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
         String entityResultInJson = getObjectInJson(addResponse);
         model.addAttribute("addData", entityResultInJson);
 
-        model.addAttribute("viewType", "entityAdd");
+        model.addAttribute("viewType", "entityMainView");
         setCommonModelAttributes(model, locale);
 
         boolean success = addResponse.success();
@@ -298,7 +299,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
-            uriFromRequest(request), entityForm);
+            uriFromRequest(request), entityForm, locale);
         EntityCreateResponse createResponse = frontEndEntityService.create(createRequest, locale);
 
         boolean success = createResponse.success();
@@ -338,7 +339,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
-            uriFromRequest(request), id);
+            uriFromRequest(request), id, locale);
 
         EntityReadResponse readResponse = frontEndEntityService.read(readRequest, locale);
         if (isAjaxDataRequest(request)) {
@@ -361,6 +362,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         makeDataMapBuilder("dataMap")
                 .addAttribute("menu", menu)
                 .addAttribute("menuPath", currentMPath)
+                .addAttribute("formResult", readResponse)
                 .addAttribute("entityName", entityName, StringUtils.isNotEmpty(entityName))
                 .addToModule(model);;
 
@@ -372,7 +374,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         String entityResultInJson = getObjectInJson(readResponse);
         model.addAttribute("readResult", entityResultInJson);
 
-        model.addAttribute("viewType", "entityView");
+        model.addAttribute("viewType", "entityMainView");
         setCommonModelAttributes(model, locale);
 
         boolean success = readResponse.success();
@@ -437,7 +439,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
-            uriFromRequest(request), entityForm);
+            uriFromRequest(request), entityForm, locale);
         EntityUpdateResponse updateResponse = frontEndEntityService.update(updateRequest, locale);
 
         boolean success = updateResponse.success();
@@ -484,7 +486,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
 
         EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
-            uriFromRequest(request), id, entityForm);
+            uriFromRequest(request), id, entityForm, locale);
 
         EntityDeleteResponse deleteResponse = frontEndEntityService.delete(deleteRequest, locale);
         boolean success = deleteResponse.success();
