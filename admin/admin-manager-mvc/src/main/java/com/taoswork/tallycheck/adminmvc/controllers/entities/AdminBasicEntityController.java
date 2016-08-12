@@ -240,7 +240,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
         String entityResultInJson = getObjectInJson(addResponse);
-        model.addAttribute("addData", entityResultInJson);
+        model.addAttribute("formResult", entityResultInJson);
 
         model.addAttribute("viewType", "entityMainView");
         setCommonModelAttributes(model, locale);
@@ -307,7 +307,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
             return this.makeDataView(model, createResponse);
         } else {
             String resultUrl = request.getContextPath() + "/" + entityTypeName + "/" + createResponse.getEntity().getIdValue();
-            return makeRedirectView(model, resultUrl);
+            return makeRedirectView(model, resultUrl, success);
         }
     }
 
@@ -446,7 +446,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         if (!success) {
             return this.makeDataView(model, updateResponse);
         } else {
-            return makeRedirectView(model, request.getRequestURI());
+            return makeRedirectView(model, request.getRequestURI(), success);
         }
     }
 
@@ -494,7 +494,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
             return this.makeDataView(model, deleteResponse);
         } else {
             String resultUrl = request.getContextPath() + "/" + entityTypeName;
-            return makeRedirectView(model, resultUrl);
+            return makeRedirectView(model, resultUrl, success);
         }
     }
 

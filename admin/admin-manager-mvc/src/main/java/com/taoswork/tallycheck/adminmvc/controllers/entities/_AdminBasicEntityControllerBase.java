@@ -73,9 +73,10 @@ abstract class _AdminBasicEntityControllerBase extends BaseController {
         return objectMapper;
     }
 
-    protected String makeRedirectView(Model model, String url) {
+    protected String makeRedirectView(Model model, String url, boolean success) {
         model.addAttribute("operation", "redirect");
         model.addAttribute("url", url);
+        model.addAttribute("success", success);
 
         return DataView;
     }
