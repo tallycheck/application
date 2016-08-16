@@ -25,6 +25,7 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -60,9 +61,12 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
     @Resource(name = AdminCoreConfig.DATA_SERVICE_MANAGER)
     private DataServiceManager dataServiceManager;
-    
+
     @Resource(name = AdminSecurityService.COMPONENT_NAME)
     private AdminSecurityService adminSecurityService;
+
+    @Resource(name = AdminCoreConfig.ENTITY_ACCESS_MESSAGE_SOURCE)
+    private MessageSource entityAccessMessageSource;
 
     private Helper helper = new Helper();
 
@@ -85,7 +89,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityInfoRequest infoRequest = Parameter2RequestTranslator.makeInfoRequest(entityTypes,
                 uriFromRequest(request), requestParams, getParamInfoFilter(), locale);
@@ -123,7 +127,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityQueryRequest entityRequest = Parameter2RequestTranslator.makeQueryRequest(entityTypes,
             uriFromRequest(request), requestParams, getParamInfoFilter(), locale);
@@ -213,7 +217,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityCreateFreshRequest addRequest = Parameter2RequestTranslator.makeCreateFreshRequest(entityTypes,
             uriFromRequest(request), locale);
@@ -238,7 +242,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
                 .addAttribute("formResult", addResponse)
                 .addToModule(model);
 
-        model.addAttribute("formInfo", addResponse.getInfos().getDetail(EntityInfoType.Form));
+        model.addAttribute("formInfo", addResponse.getInfos().getForm());
         String entityResultInJson = getObjectInJson(addResponse);
         model.addAttribute("formResult", entityResultInJson);
 
@@ -296,7 +300,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityCreateRequest createRequest = Parameter2RequestTranslator.makeCreateRequest(entityTypes,
             uriFromRequest(request), entityForm, locale);
@@ -336,7 +340,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityCeilingType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityReadRequest readRequest = Parameter2RequestTranslator.makeReadRequest(entityTypes,
             uriFromRequest(request), id, locale);
@@ -368,7 +372,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         IEntityInfo formInfo = null;
         if (readResponse.getInfos() != null) {
-            formInfo = readResponse.getInfos().getDetail(EntityInfoType.Form);
+            formInfo = readResponse.getInfos().getForm();
         }
         model.addAttribute("formInfo", formInfo);
         String entityResultInJson = getObjectInJson(readResponse);
@@ -436,7 +440,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
 
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityUpdateRequest updateRequest = Parameter2RequestTranslator.makeUpdateRequest(entityTypes,
             uriFromRequest(request), entityForm, locale);
@@ -483,7 +487,7 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
         }
         Locale locale = super.getLocale(request);
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = newFrontEndEntityService(dataService);
 
         EntityDeleteRequest deleteRequest = Parameter2RequestTranslator.makeDeleteRequest(entityTypes,
             uriFromRequest(request), id, entityForm, locale);
@@ -725,5 +729,10 @@ public class AdminBasicEntityController extends _AdminBasicEntityControllerBase 
     ///         Helper                                                              //////
     //////////////////////////////////////////////////////////////////////////////////////
     class Helper {
+    }
+
+
+    private IFrontEndEntityService newFrontEndEntityService(IDataService dataService) {
+        return FrontEndEntityService.newInstance(dataServiceManager, dataService, adminSecurityService, entityAccessMessageSource);
     }
 }

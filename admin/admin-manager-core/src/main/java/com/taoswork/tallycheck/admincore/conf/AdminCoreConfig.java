@@ -12,10 +12,12 @@ import com.taoswork.tallycheck.authentication.UserAuthenticationService;
 import com.taoswork.tallycheck.authentication.UserAuthenticationServiceMock;
 import com.taoswork.tallycheck.dataservice.manage.DataServiceManager;
 import com.taoswork.tallycheck.dataservice.manage.impl.DataServiceManagerImpl;
+import com.taoswork.tallycheck.datasolution.IDataSolutionDefinition;
 import com.taoswork.tallycheck.datasolution.annotations.DaoMark;
 import com.taoswork.tallycheck.datasolution.annotations.EntityServiceMark;
 import com.taoswork.tallycheck.general.extension.annotations.FrameworkService;
 import com.taoswork.tallycheck.general.extension.collections.PropertiesUtility;
+import com.taoswork.tallycheck.general.solution.message.MessageUtility;
 import com.taoswork.tallycheck.general.solution.spring.BeanCreationMonitor;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataService;
 import com.taoswork.tallycheck.tallyadmin.TallyAdminDataServiceMock;
@@ -27,10 +29,14 @@ import com.taoswork.tallycheck.tallybus.TallyBusDataService;
 import com.taoswork.tallycheck.tallybus.TallyBusDataServiceMock;
 import com.taoswork.tallycheck.tallyuser.TallyUserDataService;
 import com.taoswork.tallycheck.tallyuser.TallyUserDataServiceMock;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -62,6 +68,8 @@ public class AdminCoreConfig {
     public static final String MANAGEMENT_DATA_SERVICE = "tallybus-data-service";
     public static final String USER_CERT_DATA_SERVICE = "user-cert-data-service";
     public static final String ADMIN_AUTHORITY_DATA_SERVICE = "admin-authority-data-service";
+
+    public static final String ENTITY_ACCESS_MESSAGE_SOURCE = "EntityAccessMessageSource";
 
     @Bean
     public ApplicationConfig applicationConfig(){
@@ -150,6 +158,22 @@ public class AdminCoreConfig {
                 .buildingAnnounceFinishing();
 
         return dataServiceManager;
+    }
+
+    @Bean(name = ENTITY_ACCESS_MESSAGE_SOURCE)
+    public MessageSource entityAccessMessageSource(){
+        ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+        final String[] messageDirs = new String[]{};
+
+        List<String> basenameList = MessageUtility.getMessageBasenames(resolver, messageDirs, null);
+        basenameList.add("classpath:/error-messages/ServiceExceptionMessages");
+        basenameList.add("classpath:/messages/CommonMessages");
+        basenameList.add("classpath:/messages/EntityAccessMessages");
+        ms.setBasenames(basenameList.toArray(new String[basenameList.size()]));
+
+        return ms;
     }
 
     @Bean

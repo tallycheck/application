@@ -14,6 +14,7 @@ import com.taoswork.tallycheck.dataservice.frontend.service.FrontEndEntityServic
 import com.taoswork.tallycheck.dataservice.frontend.service.IFrontEndEntityService;
 import com.taoswork.tallycheck.dataservice.manage.DataServiceManager;
 import com.taoswork.tallycheck.descriptor.description.infos.EntityInfoType;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,9 @@ public class TallyApiController {
     @Resource(name = AdminCoreConfig.DATA_SERVICE_MANAGER)
     private DataServiceManager dataServiceManager;
 
+    @Resource(name = AdminCoreConfig.ENTITY_ACCESS_MESSAGE_SOURCE)
+    private MessageSource entityAccessMessageSource;
+
     @Resource(name = AdminSecurityService.COMPONENT_NAME)
     private AdminSecurityService adminSecurityService;
 
@@ -64,7 +68,7 @@ public class TallyApiController {
                 requestParams, getParamInfoFilter(), locale);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService, entityAccessMessageSource);
 
         EntityQueryResponse response = frontEndEntityService.query(queryRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
@@ -85,7 +89,7 @@ public class TallyApiController {
                 uriFromRequest(request), id, locale);
 
         IDataService dataService = dataServiceManager.getDataService(entityType.getName());
-        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService);
+        IFrontEndEntityService frontEndEntityService = FrontEndEntityService.newInstance(dataServiceManager, dataService,adminSecurityService, entityAccessMessageSource);
 
         EntityReadResponse response = frontEndEntityService.read(readRequest, request.getLocale());
         return new ResponseEntity<Object>(response, HttpStatus.OK);
